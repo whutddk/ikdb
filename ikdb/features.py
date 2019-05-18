@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+# @File Name: features.py
+# @File Path: M:\MAS2\dark_PRJ\ikdb\ikdb\features.py
+# @Author: Ruige_Lee
+# @Date:   2019-05-16 16:28:59
+# @Last Modified by:   Ruige_Lee
+# @Last Modified time: 2019-05-18 19:56:35
+# @Email: 295054118@whut.edu.cn
+# @page: https://whutddk.github.io/
 """Module for generating and testing feature mappings of hierarchical objects.
 
 Some terminology:
@@ -68,7 +77,7 @@ def extract(object,features):
         try:
             v.append(_extract_one(object,f))
         except Exception:
-            print "Error extracting feature",f,"from",object
+            print ("Error extracting feature",f,"from",object)
             raise
     return _flatten(v)
 
@@ -581,11 +590,11 @@ def multiStructureFeatureMine(dataset,countThreshold=2,quick=False):
 
 if __name__=='__main__':
     object = {'name':'Joe','type':'standard','account':1234,'orders':[2345,3456]}
-    print "Account,orders:",extract(object,['account','orders'])
-    print "Account,orders[1]:",extract(object,['account',['orders',1]])
+    print ("Account,orders:",extract(object,['account','orders']))
+    print ("Account,orders[1]:",extract(object,['account',['orders',1]]))
 
     inject(object,['account','orders'],[1235,2346,3457])
-    print "Injected:",object
+    print ("Injected:",object)
 
     #test the single-structure miner
     import copy
@@ -596,29 +605,29 @@ if __name__=='__main__':
     object2['account'] = 586
     object2['orders'][1] = 7201
     t0 = time.time()
-    print "Features:",featureMine([object1,object2]*10000,quick=True)[0]
-    print "Batch time:",time.time()-t0
+    print ("Features:",featureMine([object1,object2]*10000,quick=True)[0])
+    print ("Batch time:",time.time()-t0)
     t0 = time.time()
     disc = IncrementalFeatureMiner(dataset=[object1,object2]*10000)
     t1 = time.time()
-    print "Features:",disc.getFeatureList()
-    print "Incremental time:",t1-t0
+    print ("Features:",disc.getFeatureList())
+    print ("Incremental time:",t1-t0)
 
     #test the multi-structure miner
     t0 = time.time()
     structs,featureLists,featureCounts = zip(*multiStructureFeatureMine([100,40,{'foo':'bar'},{'foo':'baz','a':30},{'foo':'baz','a':60},40]*10000))
     t1 = time.time()
-    print "Template: Features"
+    print ("Template: Features")
     for (s,f) in zip(structs,featureLists):
-        print structure(s,hashable=False),":",",".join(str(fi) for fi in f)
-    print "Batch time",t1-t0
+        print (structure(s,hashable=False),":",",".join(str(fi) for fi in f))
+    print ("Batch time",t1-t0)
     t0 = time.time()
     disc = IncrementalMultiStructureFeatureMiner(dataset=[100,40,{'foo':'bar'},{'foo':'baz','a':30},{'foo':'baz','a':60},40]*10000)
     t1 = time.time()
     templates = disc.getTemplates()
-    print "Template: Features"
+    print ("Template: Features")
     for t in templates:
         f = disc.getFeatureList(t)
-        print structure(t,hashable=False),':',",".join(str(fi) for fi in f)
-    print "Incremental time",t1-t0    
+        print (structure(t,hashable=False),':',",".join(str(fi) for fi in f))
+    print ("Incremental time",t1-t0    )
                                                                        
